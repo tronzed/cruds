@@ -65,3 +65,121 @@ const handleDelete = async (id) => {
     console.error("Error deleting user:", error);
   }
 };
+
+
+
+
+
+
+import { useEffect, useState } from 'react'
+import './App.css'
+
+function App() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+  });
+
+  const [dataBox, setDataBox] = useState([]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:8000/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save user');
+      }
+
+      const data = await response.json();
+      console.log('User saved:', data);
+
+      setFormData({ name: '', email: '' });
+      readbox(); // Refresh table after adding
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const readbox = async () => {
+    try {
+      const res = await fetch('http://localhost:8000/users');
+      const data = await res.json();
+      setDataBox(data);
+    } catch (error) {
+      setDataBox([]);
+    }
+  };
+
+  useEffect(() => {
+    readbox();
+  }, []);
+
+  return (
+    <>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="name"
+          placeholder="enter Name"
+          value={formData.name}
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          name="email"
+          placeholder="enter ID"
+          value={formData.email}
+          onChange={handleChange}
+        />
+        <button type="submit">Add</button>
+      </form>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>ID</th>
+            <th>Post</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Array.isArray(dataBox) && dataBox.length > 0 ? (
+            dataBox.map((user, idx) => (
+              <tr key={user.id || idx}>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{user.post || '-'}</td>
+                <td>
+                  <button>Edit</button>
+                  <button className="delete">Delete</button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="4">No users found</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </>
+  );
+}
+
+export default App

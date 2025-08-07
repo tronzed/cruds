@@ -63,3 +63,7 @@ form {
 body {
     padding-top: 81px;
 }
+
+form.updata_form {
+    top: 74px;
+}
