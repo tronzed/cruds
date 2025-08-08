@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import { useNavigate } from 'react-router-dom';
 
 function App() {
+
+  const nav = useNavigate();
 
   const [id, setId] = useState();
   const [name, setname] = useState();
@@ -16,28 +19,35 @@ function App() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
+    }).then(() => {
+      // nav("/index");
+      read();
     })
   }
 
   // Update Data
-  function handleEdit(e){
+  function handleEdit(e) {
     e.preventDefault();
 
     const data = { id, name, post };
 
-    fetch('http://localhost:8000/users/3',{
-      method:"PUT",
-      headers:{"Content-Type":"application/json"},
+    fetch('http://localhost:8000/users/3', {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     });
   }
 
   // Delete Data
-  function handleDelete(id){
+  function handleDelete(id) {
     // e.preventDefault();
-    fetch('http://localhost:8000/users/'+id,{
-      method:'DELETE'
+    fetch('http://localhost:8000/users/' + id, {
+      method: 'DELETE'
+    }).then(() => {
+      // nav("/index"); 
+      read();
     })
+
   }
 
   // Read Data
@@ -92,7 +102,7 @@ function App() {
                   <td>{item.id}</td>
                   <td>{item.name}</td>
                   <td>{item.post}</td>
-                  <td><button>Edit</button><button onClick={()=>handleDelete(item.id)} className='delete'>Delete</button></td>
+                  <td><button>Edit</button><button onClick={() => handleDelete(item.id)} className='delete'>Delete</button></td>
                 </tr>
               </>
             ))
