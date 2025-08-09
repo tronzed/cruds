@@ -65,16 +65,12 @@ function App() {
   return (
     <>
 
-
-
-
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder='Enter Id' value={id} onChange={(e) => setId(e.target.value)} />
         <input type="text" name='name' placeholder='enter Name' value={name} onChange={(e) => setname(e.target.value)} />
         <input type="text" name='post' placeholder='enter post' value={post} onChange={(e) => setPost(e.target.value)} />
         <button type="submit">Add</button>
       </form>
-
 
       <form className='updata_form' onSubmit={handleEdit}>
         <input type="text" placeholder='Enter Id' value={id} onChange={(e) => setId(e.target.value)} />
@@ -83,13 +79,13 @@ function App() {
         <button type="submit">Update</button>
       </form>
 
-      <table>
-        <thead>
+      <table className="min-w-full border border-gray-300 rounded-lg shadow-md">
+        <thead className="bg-gray-200">
           <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Post</th>
-            <th>Actions</th>
+            <th className="px-4 py-2 border border-gray-300">ID</th>
+            <th className="px-4 py-2 border border-gray-300">Name</th>
+            <th className="px-4 py-2 border border-gray-300">Post</th>
+            <th className="px-4 py-2 border border-gray-300">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -98,24 +94,19 @@ function App() {
 
             readData?.map((item, index) => (
               <>
-                <tr>
-                  <td>{item.id}</td>
-                  <td>{item.name}</td>
-                  <td>{item.post}</td>
-                  <td><button>Edit</button><button onClick={() => handleDelete(item.id)} className='delete'>Delete</button></td>
+                <tr className="hover:bg-gray-100 transition duration-200">
+                  <td className="px-4 py-2 border border-gray-300">{item.id}</td>
+                  <td className="px-4 py-2 border border-gray-300">{item.name}</td>
+                  <td className="px-4 py-2 border border-gray-300">{item.post}</td>
+                  <td className="px-4 py-2 border border-gray-300"><button>Edit</button><button onClick={() => handleDelete(item.id)} className='delete'>Delete</button></td>
                 </tr>
               </>
             ))
-
           }
-
-
-
-
 
         </tbody>
       </table>
-
+      
 
     </>
   )
