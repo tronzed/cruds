@@ -1,40 +1,5 @@
 @import "tailwindcss";
 
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
 .card {
   padding: 2em;
 }
@@ -50,12 +15,14 @@
 
 form {
     margin-bottom: 30px;
-    border: 1px solid;
+    border: 1px solid #F0DAF0;
     padding: 12px;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
+    background-color: #fff;
+    box-shadow: 0 0 55px -30px #000;
 }
 
 body {
@@ -63,5 +30,13 @@ body {
 }
 
 form.updata_form {
-    top: 74px;
+    bottom: 0;
+    top: unset;
+    margin-bottom: 0;
+}
+
+.table_box {
+    max-width: 600px;
+    margin: 110px auto 0;
+    width: 100%;
 }
