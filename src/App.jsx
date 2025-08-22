@@ -46,9 +46,10 @@ function App() {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
+    }).then(()=>{
+      read();
     });
 
-    read();
 
   }
 
@@ -82,7 +83,7 @@ function App() {
       firebaseId: key,
       ...value,
     }));
-
+    
     setReadData(usersArray);
     console.log(usersArray);
 
