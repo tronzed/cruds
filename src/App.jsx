@@ -14,13 +14,14 @@ function App() {
   const [editid, setEditId] = useState();
   const [editname, setEditname] = useState();
   const [editpost, setEditPost] = useState();
+  const [editfirebaseid, setEditfirebaseid] = useState();
 
 
   // create Data
   function handleSubmit(e) {
     e.preventDefault();
     const data = { id, name, post };
-    fetch('http://localhost:8000/users', {
+    fetch('https://cruds-cdb8f-default-rtdb.firebaseio.com/users.json', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
@@ -34,15 +35,14 @@ function App() {
   function handleEdit(e) {
     e.preventDefault();
 
-
+    let fireid = editfirebaseid;
     let id = editid;
     let name = editname;
     let post = editpost;
 
-
     const data = { id, name, post };
 
-    fetch('http://localhost:8000/users/'+editid, {
+    fetch(`https://cruds-cdb8f-default-rtdb.firebaseio.com/users/${fireid}.json`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
@@ -55,7 +55,7 @@ function App() {
   // Delete Data
   function handleDelete(id) {
     // e.preventDefault();
-    fetch('http://localhost:8000/users/' + id, {
+    fetch(`https://cruds-cdb8f-default-rtdb.firebaseio.com/users/${id}.json`, {
       method: 'DELETE'
     }).then(() => {
       // nav("/index"); 
@@ -63,20 +63,29 @@ function App() {
     })
   }
 
-  // Read Data
+  // Read the id and Data
   const readAsign = async (id) => {
-    let res = await fetch('http://localhost:8000/users/' + id);
+    let res = await fetch(`https://cruds-cdb8f-default-rtdb.firebaseio.com/users/${id}.json`);
     let data = await res.json();
     setEditId(data['id']);
     setEditname(data['name']);
     setEditPost(data['post']);
+    setEditfirebaseid(id)
   }
 
-  // Read the id and Data
+  // Read Data
   const read = async () => {
-    let res = await fetch('http://localhost:8000/users');
+    let res = await fetch('https://cruds-cdb8f-default-rtdb.firebaseio.com/users.json');
     let data = await res.json();
-    setReadData(data);
+
+    const usersArray = Object.entries(data).map(([key, value]) => ({
+      firebaseId: key,
+      ...value,
+    }));
+
+    setReadData(usersArray);
+    console.log(usersArray);
+
   }
 
 
@@ -98,14 +107,17 @@ function App() {
       {editShow && (
 
         <form className='updata_form justify-center flex items-center  gap-2' onSubmit={handleEdit}>
-          <input className='border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500' 
-          type="text" placeholder='Enter Id' value={editid} onChange={(e) => setEditId(e.target.value)} />
-          
-          <input className='border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500' 
-          type="text" name='name' placeholder='enter Name' value={editname} onChange={(e) => setEditname(e.target.value)} />
-          
-          <input className='border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500' 
-          type="text" name='post' placeholder='enter post' value={editpost} onChange={(e) => setEditPost(e.target.value)} />
+
+          <input type="hidden" name="firebaseId" value={editfirebaseid} />
+
+          <input className='border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+            type="text" placeholder='Enter Id' value={editid} onChange={(e) => setEditId(e.target.value)} />
+
+          <input className='border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+            type="text" name='name' placeholder='enter Name' value={editname} onChange={(e) => setEditname(e.target.value)} />
+
+          <input className='border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+            type="text" name='post' placeholder='enter post' value={editpost} onChange={(e) => setEditPost(e.target.value)} />
           <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" type="submit">Update</button>
         </form>
 
@@ -129,8 +141,8 @@ function App() {
                   <td className="px-4 py-2 border border-gray-300">{item.name}</td>
                   <td className="px-4 py-2 border border-gray-300">{item.post}</td>
                   <td className="px-4 py-2 border border-gray-300">
-                    <button onClick={() => {setEditShow(true); readAsign(item.id);}} className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'>Edit</button>
-                    <button onClick={() => handleDelete(item.id)} className='bg-red-500 ml-5 text-white px-4 py-2 rounded hover:bg-red-600'>Delete</button>
+                    <button onClick={() => { setEditShow(true); readAsign(item.firebaseId); }} className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'>Edit</button>
+                    <button onClick={() => handleDelete(item.firebaseId)} className='bg-red-500 ml-5 text-white px-4 py-2 rounded hover:bg-red-600'>Delete</button>
                   </td>
                 </tr>
               </>
